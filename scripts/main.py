@@ -14,4 +14,3 @@ random_state = 2010
 
 if __name__ == "__main__":
     print('hello')
-    print('yes')

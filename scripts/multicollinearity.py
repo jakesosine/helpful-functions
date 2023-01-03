@@ -1,7 +1,6 @@
 import pandas as pd 
 import numpy as np 
 
-
 def get_collinearity(df:pd.DataFrame,
                      low:float=-.65,
                      high: float=.65,) -> pd.DataFrame:
@@ -43,6 +42,43 @@ def get_collinearity(df:pd.DataFrame,
         else: 
             stupid_ml_dct[corr_df_for_dict['feature_1'][i]] = corr_df_for_dict['feature_2'][i]
     return corr_df, stupid_ml_dct
+
+def get_variance_inflation_factor(df,
+                                  variables:list,
+                                  plot:bool=True):
+    """
+    Description:Variance Inflation Factor (VIF) is a score telling us about how
+    well an independent variable is predictable using other independent variables. 
+    This may indicate that we need to adjust our feature space in order to reduce
+    the likelihood of multicollinearity.  
+    ------
+    Parameters
+    ----------
+    df: pd.DataFrame
+        Dataframe needs to be less of np.inf or -np.inf values as well as null
+        values
+    variables: list 
+        list of variables to check for multicollinearity
+    Returns
+    -------
+    vif_df:pd.DataFrame
+        dataframe with VIF metric
+    Other: graph
+        Graph that shit
+    """              
+    from statsmodels.stats.outliers_influence import variance_inflation_factor
+    vif_df = pd.DataFrame()
+    df = df[variables]
+    vif_df['features'] = df[variables].columns
+    vif_df['score'] = [variance_inflation_factor(df.values, i) for i in range(len(df.columns))]
+    vif_df = vif_df.sort_values(by=['score'],ascending=False)
+    if plot == True:
+        fig, ax = plt.subplots(figsize=(12,8))
+        sns.barplot(data=vif_df,x='score',y='features',ax=ax,color='black')
+        ax.set_xlabel('VIF Score', fontsize=18,labelpad=15)
+        ax.set_ylabel('Features', fontsize=18,labelpad=15)
+        plt.show()
+    return vif_df  
 
 
 if __name__ == '__main__':
