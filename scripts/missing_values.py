@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np 
 from main import random_state
 
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 def get_missing_vals(df:pd.DataFrame,
                      graph:bool=True):
     """
@@ -32,6 +35,8 @@ def get_missing_vals(df:pd.DataFrame,
         ax.set_xlabel('Proportion of Missing Values', fontsize=20, labelpad=10)
         ax.set_xlim([0,1])
         ax.tick_params(axis='both',labelsize=20)
+        plt.tight_layout()
+        plt.savefig('./figures/proportion_missing.pdf')
         plt.show()
     return prop_missing
 
@@ -68,4 +73,6 @@ def iterative_imputer(df,
 
 
 if __name__ == '__main__':
-    print('test')
+    test_df = pd.read_csv('./data/01_raw/test.csv')
+    prop_missing = get_missing_vals(test_df)
+    print(prop_missing)

@@ -1,3 +1,5 @@
+import os 
+
 # tabular data / linear algebra
 import pandas as pd 
 import numpy as np
@@ -13,4 +15,5 @@ random_state = 2010
 
 
 if __name__ == "__main__":
-    print('hello')
+    df = pd.read_csv('./data/01_raw/test.csv')
+    print(df.head())
